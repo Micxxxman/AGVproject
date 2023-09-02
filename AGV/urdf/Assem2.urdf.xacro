@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-1-g15f4949  Build Version: 1.6.7594.29634
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="Assem2">
+
+
+
+<xacro:macro name="Transmission_block" params="joint_name">
+   <transmission name="${joint_name}_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+     <joint name="${joint_name}">
+       <hardwareInterface>PositionJointInterface</hardwareInterface>
+     </joint>
+    <actuator name="${joint_name}_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+     </actuator>
+    </transmission>
+ </xacro:macro>
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <mass
+         value="0.3" />
+      <inertia
+        ixx="1.23244451949842"
+        ixy="-0.000990980279970894"
+        ixz="0.0115909911525729"
+        iyy="1.74167786796136"
+        iyz="-0.0328758222466807"
+        izz="2.03481558274004" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://diff_drive/meshes/base_link_ass.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://diff_drive/meshes/base_link_ass.STL" />
+      </geometry>
+    </collision>
+  </link>
+   <gazebo reference ="base_link">
+    <mu1 value="200.0"/>
+    <mu2 value="100.0"/>
+    <kp value="270000.0"/>
+    <kd value= "1.0"/>
+</gazebo>
+   <gazebo reference="base_link">
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+  
+
+  
+      <gazebo>
+        <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+            <robotNamespace>/</robotNamespace>
+        </plugin>
+    </gazebo>
+</robot>

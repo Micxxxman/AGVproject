@@ -1,0 +1,758 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-1-g15f4949  Build Version: 1.6.7594.29634
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<!-- ////////////////////////////////////////////////////////////-->
+  <!-- Link-->
+
+
+
+
+
+
+
+<robot name="Diff_Drive" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+
+
+<xacro:macro name="Transmission_block" params="joint_name">
+   <transmission name="${joint_name}_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+     <joint name="${joint_name}">
+       <hardwareInterface>PositionJointInterface</hardwareInterface>
+     </joint>
+    <actuator name="${joint_name}_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+     </actuator>
+    </transmission>
+ </xacro:macro>
+
+
+
+
+
+
+      
+  <link name="baselink">
+    <inertial>
+      <origin
+        xyz="-0.00049053 -0.065991 0.02257" rpy="0 0 0" />
+      <mass value="97.115" />
+      <inertia ixx="1.7506" ixy="-0.00029661" ixz="0.00013995" iyy="0.96096" iyz="0.015156" izz="2.2835" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://diff_drive/meshes/base_link.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://diff_drive/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+     <gazebo reference="baselink">
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+
+
+   <!-- ///////////////////      hand      ///////////////////////   -->
+   
+   
+   <xacro:macro name="hand" params= "prefix suffix X Y Z">
+    <link name="leftarmlink">
+      <inertial>
+        <origin xyz="-0.018912 -0.22262 -0.072208" rpy="0 0 0" />
+        <mass value="4.2191" />
+        <inertia ixx="0.13647" ixy="-0.0070672" ixz="-0.0023941" iyy="0.029465" iyz="-0.050315" izz="0.11472"/>
+        </inertial>
+        <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+        <mesh filename="package://diff_drive/meshes/leftarmlink.STL" />
+        </geometry>
+        <material name="">
+        <color rgba="0.89804 0.91765 0.92941 1" />
+        </material>
+        </visual>
+        <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+        <mesh filename="package://diff_drive/meshes/leftarmlink.STL" />
+        </geometry>
+    </collision>
+    </link>
+
+
+    <joint name="leftarmjoint" type="continuous">
+         <origin xyz="0.33465 -0.39761 0.38823" rpy="0.026992 0 0" />
+        <parent link="baselink" />
+        <child link="leftarmlink" />
+        <axis xyz="-1 0 0" />
+        <limit effort="1" velocity="1"/>
+        <dynamics damping="100.0" friction="0.1"/>
+    </joint>
+    
+    
+<gazebo reference ="leftarmlink">
+    <mu1 value="200.0"/>
+    <mu2 value="100.0"/>
+    <kp value="285000.0"/>
+    <kd value= "1.0"/>
+</gazebo>
+  
+
+    <transmission name="leftarm_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <actuator name="leftarm_motor">
+        <hardwareInterface>PositionJointInterface</hardwareInterface>
+       
+      </actuator>
+      <joint name="leftarmjoint">
+        <hardwareInterface>PositionJointInterface</hardwareInterface>
+      </joint>
+ </transmission>
+</xacro:macro>
+<xacro:hand prefix="right" suffix="front" X="1" Y="0" Z="-1"/>
+
+<!--////////////////////////  arm hand left /////////////////////-->
+
+
+
+<!-- ///////////////////     arm hand leftlock       ///////////////////////   -->
+   
+   
+   <xacro:macro name="hand" params= "prefix suffix X Y Z">
+   <link name="leftarmlocklink">
+    <inertial>
+      <origin xyz="-5.0991E-06 0.0086485 0.018746" rpy="0 0 0" />
+      <mass value="0.072376" />
+      <inertia
+        ixx="2.4489E-05"
+        ixy="1.6714E-09"
+        ixz="-2.6019E-09"
+        iyy="1.1537E-05"
+        iyz="-9.9746E-06"
+        izz="2.1768E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://diff_drive/meshes/leftarmlocklink.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.89804 0.91765 0.92941 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://diff_drive/meshes/leftarmlocklink.STL" />
+      </geometry>
+    </collision>
+  </link>
+    <joint
+        name="leftarmlockjoint"
+        type="prismatic">
+        <origin
+        xyz="-0.0315 -0.24451 -0.03121"
+        rpy="-0.026992 0 0" />
+        <parent
+        link="leftarmlink" />
+        <child
+        link="leftarmlocklink" />
+        <axis
+        xyz="0 -0.84099 -0.54105" />
+          <limit effort="200" lower="-100.0" upper="100.0" velocity="1" />
+        <dynamics damping="1.0" friction="5"/>
+    </joint>
+  <gazebo reference ="rightarmlocklink">
+     <mu1 value="200.0"/>
+    <mu2 value="100.0"/>
+    <kp value="10000000.0"/>
+    <kd value= "1.0"/>
+</gazebo>
+
+
+    <transmission name="leftarmlock_trans">
+        <type>transmission_interface/SimpleTransmission</type>
+        <actuator name="leftarmlock_motor">
+        <hardwareInterface>EffortJointInterface</hardwareInterface>
+          <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+        <joint name="leftarmlockjoint">
+        <hardwareInterface>EffortJointInterface</hardwareInterface>
+        </joint>
+    </transmission>
+    </xacro:macro>
+    <xacro:hand prefix="right" suffix="front" X="1" Y="0" Z="-1"/>
+
+<!--////////////////////////  arm hand leftlock /////////////////////-->
+
+
+
+
+
+
+
+
+
+
+
+
+  <xacro:macro name="hand" params= "prefix suffix X Y Z">
+
+
+
+    <link name="rightarmlink">
+        <inertial>
+        <origin
+        xyz="0.01886 -0.21976 -0.080117"
+        rpy="0 0 0" />
+        <mass
+        value="4.2197" />
+        <inertia
+        ixx="0.13674"
+        ixy="0.0070243"
+        ixz="0.0026651"
+        iyy="0.033196"
+        iyz="-0.053305"
+        izz="0.11126" />
+        </inertial>
+        <visual>
+        <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+        <geometry>
+        <mesh filename="package://diff_drive/meshes/rightarmlink.STL" />
+        </geometry>
+        <material
+        name="">
+        <color
+        rgba="0.89804 0.91765 0.92941 1" />
+        </material>
+        </visual>
+        <collision>
+        <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+        <geometry>
+        <mesh filename="package://diff_drive/meshes/rightarmlink.STL" />
+        </geometry>
+        </collision>
+    </link>
+    <joint name="rightarmjoint"
+        type="continuous">
+        <origin
+        xyz="-0.33459 -0.39761 0.38823"
+        rpy="0.026992 0 0" />
+        <parent
+        link="baselink" />
+        <child
+        link="rightarmlink" />
+        <axis
+        xyz="-1 0 0" />
+        <limit effort="1" velocity="1"/>
+        <dynamics damping="100.0" friction="0.1"/>
+    </joint>
+
+ 
+ 
+ 
+  <gazebo reference ="rightarmlink">
+  <mu1 value="200.0"/>
+    <mu2 value="100.0"/>
+    <kp value="285000.0"/>
+    <kd value= "1.0"/>
+</gazebo>
+
+    <transmission name="rightarm_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <actuator name="rightarm_motor">
+        <hardwareInterface>PositionJointInterface</hardwareInterface>
+     
+      </actuator>
+      <joint name="rightarmjoint">
+        <hardwareInterface>PositionJointInterface</hardwareInterface>
+      </joint>
+ </transmission>
+</xacro:macro>
+<xacro:hand prefix="right" suffix="front" X="1" Y="0" Z="-1"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--////////////////////////  arm hand righ arm lock /////////////////////-->
+
+  <xacro:macro name="hand" params= "prefix suffix X Y Z">
+
+   <link
+    name="rightarmlocklink">
+    <inertial>
+      <origin
+        xyz="5.0991E-06 0.026068 0.030354"
+        rpy="0 0 0" />
+      <mass
+        value="0.072376" />
+      <inertia
+        ixx="2.4489E-05"
+        ixy="-1.6978E-09"
+        ixz="2.5847E-09"
+        iyy="1.1713E-05"
+        iyz="-1.0063E-05"
+        izz="2.1592E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://diff_drive/meshes/rightarmlocklink.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://diff_drive/meshes/rightarmlocklink.STL" />
+      </geometry>
+    </collision>
+  </link>
+ <joint
+    name="rightarmlockjoint"
+    type="prismatic">
+    <origin
+      xyz="0.0315 -0.24402 -0.040444"
+      rpy="0 0 0" />
+    <parent
+      link="rightarmlink" />
+    <child
+      link="rightarmlocklink" />
+    <axis
+      xyz="0 -0.83621 -0.54842" />
+     <limit effort="200" lower="-100.0" upper="100.0" velocity="1" />
+        <dynamics damping="1.0" friction="5"/>
+    </joint>
+  <gazebo reference ="rightarmlocklink">
+     <mu1 value="200.0"/>
+    <mu2 value="100.0"/>
+    <kp value="10000000.0"/>
+    <kd value= "1.0"/>
+</gazebo>
+
+    <transmission name="rightarmlock_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <actuator name="rightarmlock_motor">
+        <hardwareInterface>EffortJointInterface</hardwareInterface>
+         <mechanicalReduction>1</mechanicalReduction>
+     
+      </actuator>
+      <joint name="rightarmlockjoint">
+        <hardwareInterface>EffortJointInterface</hardwareInterface>
+        
+      </joint>
+ </transmission>
+</xacro:macro>
+<xacro:hand prefix="right" suffix="front" X="1" Y="0" Z="-1"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ///////////////////      Wheels-fr     ///////////////////////   -->
+    <xacro:macro name="wheel" params= "prefix suffix X Y Z">
+     <link name="rigthfrontlink">
+        <inertial>
+      <origin
+        xyz="-0.012906 1.1046E-05 -1.1039E-05"
+        rpy="0 0 0" />
+      <mass
+        value="5.037" />
+      <inertia
+        ixx="0.012312"
+        ixy="4.1481E-07"
+        ixz="-4.1179E-07"
+        iyy="0.0074856"
+        iyz="-6.4038E-07"
+        izz="0.0074856" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://diff_drive/meshes/rigthfrontlink.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://diff_drive/meshes/rigthfrontlink.STL" />
+      </geometry>
+    </collision>
+    </link>
+
+<gazebo reference ="rigthfrontlink">
+    <mu1 value="200.0"/>
+    <mu2 value="100.0"/>
+     <kp value="10000000.0"/>
+    <kd value= "1.0"/>
+</gazebo>
+   
+  
+    <joint name="rightfrontjoint" type="continuous">
+        <origin xyz="-0.18497 -0.30239 -0.13995" rpy="0.026992 0 0" />
+        <parent link="baselink" />
+        <child link="rigthfrontlink" />
+        <axis xyz="1 0 0" />
+        <limit effort="100" velocity="10000"/>
+       <dynamics damping="1.0" friction="0.8"/>
+    </joint>
+
+
+ <transmission name="frjoint_wheel_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <actuator name="frjoint_wheel_motor">
+        <hardwareInterface>EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+      <joint name="rightfrontjoint">
+        <hardwareInterface>VelocityJointInterface</hardwareInterface>
+      </joint>
+ </transmission>
+</xacro:macro>
+
+<xacro:wheel prefix="right" suffix="front" X="1" Y="0" Z="-1"/>
+
+<!-- ///////////////////      Wheels-ar     ///////////////////////   -->
+    <xacro:macro name="wheel" params= "prefix suffix X Y Z">
+
+   <link   name="rightafterlink">
+    <inertial>
+      <origin
+        xyz="-0.01290595895666 1.56126985286775E-05 -3.65243639888213E-07"
+        rpy="0 0 0" />
+      <mass
+        value="5.03701692268853" />
+      <inertia
+        ixx="0.0123120639841708"
+        ixy="5.83983336359533E-07"
+        ixz="-1.20249122920184E-08"
+        iyy="0.00748621698179896"
+        iyz="-1.00542982753282E-08"
+        izz="0.00748494025743056" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://diff_drive/meshes/rightafterlink.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://diff_drive/meshes/rightafterlink.STL" />
+      </geometry>
+        </collision>
+    </link>
+   <gazebo reference ="rightafterlink">
+    <mu1 value="200.0"/>
+    <mu2 value="100.0"/>
+    <kp value="10000000.0"/>
+    <kd value= "1.0"/>
+   
+   </gazebo>
+
+    <joint name="rightafterjoint" type="continuous">
+       <origin
+      xyz="-0.18497 0.30015 -0.13995"
+      rpy="0.026992 0 0" />
+    <parent
+      link="baselink" />
+    <child
+      link="rightafterlink" />
+    <axis
+      xyz="1 0 0" />
+        <limit effort="100" velocity="10000"/>
+       <dynamics damping="1.0" friction="0.8"/>
+    </joint>
+   
+<transmission name="aljoint_wheel_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <actuator name="aljoint_wheel_motor">
+        <hardwareInterface>EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+      <joint name="rightafterjoint">
+        <hardwareInterface>VelocityJointInterface</hardwareInterface>
+      </joint>
+ </transmission>
+</xacro:macro>
+
+<xacro:wheel prefix="left" suffix="back" X="0" Y="1" Z="1"/> 
+
+
+<!-- ///////////////////      Wheels -al     ///////////////////////   -->
+
+<xacro:macro name="wheel" params= "prefix suffix X Y Z">
+    
+    <link 
+    name="leftfrontlink">
+    <inertial>
+      <origin
+        xyz="0.012906 -4.2528E-06 -1.5079E-05"
+        rpy="0 0 0" />
+      <mass
+        value="5.037" />
+      <inertia
+        ixx="0.012312"
+        ixy="1.5884E-07"
+        ixz="5.6106E-07"
+        iyy="0.007485"
+        iyz="3.4773E-07"
+        izz="0.0074861" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://diff_drive/meshes/leftfrontlink.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://diff_drive/meshes/leftfrontlink.STL" />
+      </geometry>
+    </collision>
+    </link>
+
+<gazebo reference ="leftfrontlink">
+    <mu1 value="200.0"/>
+    <mu2 value="100.0"/>
+    <kp value="10000000.0"/>
+    <kd value= "1.0"/>
+    
+   <material>Gazebo/Black</material>
+    </gazebo>
+
+    <joint name="leftfrontjoint" type="continuous">
+    <origin
+      xyz="0.18503 -0.30239 -0.13995"
+      rpy="0.026992 0 0" />
+    <parent
+      link="baselink" />
+    <child
+      link="leftfrontlink" />
+    <axis
+      xyz="1 0 0" />
+           <limit effort="100" velocity="10000"/>
+        <dynamics damping="1.0" friction="0.8"/>
+    </joint>
+    
+ 
+    
+   <transmission name="alright_wheel_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <actuator name="alright_wheel_motor">
+        <hardwareInterface>EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+      <joint name="leftfrontjoint">
+        <hardwareInterface>VelocityJointInterface</hardwareInterface>
+      </joint>
+ </transmission>
+</xacro:macro>
+
+ <xacro:wheel prefix="right" suffix="back" X="0" Y="1" Z="-1"/>
+
+
+<xacro:macro name="wheel" params= "prefix suffix X Y Z">
+    <link   name="leffafterlink">
+    <inertial>
+      <origin
+        xyz="0.012906 -1.1046E-05 -1.1039E-05"
+        rpy="0 0 0" />
+      <mass
+        value="5.037" />
+      <inertia
+        ixx="0.012312"
+        ixy="4.1481E-07"
+        ixz="4.1179E-07"
+        iyy="0.0074856"
+        iyz="6.4038E-07"
+        izz="0.0074856" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://diff_drive/meshes/leffafterlink.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://diff_drive/meshes/leffafterlink.STL" />
+      </geometry>
+    </collision>
+    </link>
+   
+
+  <gazebo reference ="leffafterlink">
+    <mu1 value="200.0"/>
+    <mu2 value="100.0"/>
+    <kp value="10000000.0"/>
+    <kd value= "1.0"/>
+   <material>Gazebo/Black</material>
+    </gazebo>
+
+<joint  name="leftafterjoint"
+    type="continuous">
+    <origin
+      xyz="0.18503 0.30015 -0.13995"
+      rpy="0.026992 0 0" />
+    <parent
+      link="baselink" />
+    <child
+      link="leffafterlink" />
+    <axis
+      xyz="1 0 0" />
+        <limit effort="100" velocity="10000"/>
+        <dynamics damping="1.0" friction="0.8"/>
+    </joint>
+
+    <transmission name="fljoint_wheel_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <actuator name="fljoint_wheel_motor">
+        <hardwareInterface>EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+      <joint name="leftafterjoint">
+         <hardwareInterface>EffortJointInterface</hardwareInterface>
+      </joint>
+ </transmission>
+</xacro:macro>
+<xacro:wheel prefix="left" suffix="front" X="-1" Y="0" Z="1"/>
+
+
+    
+
+
+    <gazebo>
+  <plugin name="gazebo_ros_control" filename= "libgazebo_ros_control.so">
+   <robotNamespace>/</robotNamespace>
+  </plugin>
+</gazebo>
+
+</robot>
+

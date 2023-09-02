@@ -1,0 +1,46 @@
+Diff_Drive:
+  diff_drive_controller:
+     type: "diff_drive_controller/DiffDriveController"
+     publish_rate: 100
+
+     #left_wheel: ['rightfront','rightafter']
+     #right_wheel: ['leffafter','leftfrontjoint']
+     left_wheel: ['leftafterjoint','leftfrontjoint']
+     right_wheel: ['rightfrontjoint','rightafterjoint']
+     
+
+     wheel_separation: 0.52
+     wheel_radius: 0.105
+     # Odometry covariances for the encoder output of the robot. These values should
+     # be tuned to your robot's sample odometry data, but these values are a good place
+     # to start
+     pose_covariance_diagonal: [0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 1000.0]
+     twist_covariance_diagonal: [0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 1000.0]
+
+     # Top level frame (link) of the robot description
+     base_frame_id: base_link
+     odemetry_frame: odom
+     publish_odom: true
+     publish_odom_tf: true
+     publish_wheel_tf: true
+     # Velocity and acceleration limits for the robot
+     linear:
+       x:
+         has_velocity_limits    : true
+         max_velocity           : 1000000  # m/s
+         has_acceleration_limits: true
+         max_acceleration       : 50000  # m/s^2
+     angular:
+       z:
+         has_velocity_limits    : true
+         max_velocity           : 1000000 # rad/s
+         has_acceleration_limits: true
+         max_acceleration       : 50000   # rad/s^2
+         
+ 
+     
+ 
+         
+         
+         
+

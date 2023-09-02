@@ -1,0 +1,23 @@
+digraph G {
+node [shape=box];
+"baselink" [label="baselink"];
+"arLink" [label="arLink"];
+"alLink" [label="alLink"];
+"flLink" [label="flLink"];
+"frLink" [label="frLink"];
+"lhLink" [label="lhLink"];
+"rhLink" [label="rhLink"];
+node [shape=ellipse, color=blue, fontcolor=blue];
+"baselink" -> "aljoint" [label="xyz: 0.22425 -0.44288 0.27354 \nrpy: 1.5708 -0 0"]
+"aljoint" -> "arLink"
+"baselink" -> "alright" [label="xyz: -0.14575 -0.44288 0.27354 \nrpy: 1.5708 -0 0"]
+"alright" -> "alLink"
+"baselink" -> "fljoint" [label="xyz: -0.14575 -1.0454 0.27354 \nrpy: 1.5708 -0 0"]
+"fljoint" -> "flLink"
+"baselink" -> "frjoint" [label="xyz: 0.22425 -1.0454 0.27354 \nrpy: 1.5708 -0 0"]
+"frjoint" -> "frLink"
+"baselink" -> "lhjoint" [label="xyz: -0.22987 -1.1406 0.80172 \nrpy: 1.5708 -0 0"]
+"lhjoint" -> "lhLink"
+"baselink" -> "rhjoint" [label="xyz: 0.30837 -1.1406 0.80172 \nrpy: 1.5708 -4.23516e-22 -3.14159"]
+"rhjoint" -> "rhLink"
+}

@@ -1,0 +1,30 @@
+Diff_Drive:
+  # Publish all joint states -----------------------------------
+  joint_state_controller:
+    type: joint_state_controller/JointStateController
+    publish_rate: 50
+  
+
+  # Position Controllers ---------------------------------------
+  Shoulder_pan_position_controller:
+    type: position_controllers/JointPositionController
+    joint: leftarmjoint 
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+ # Shoulder_roll_position_controller:
+  Shoulder_roll_position_controller:
+    type: position_controllers/JointPositionController
+    joint: rightarmjoint
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  #control the lock 
+  joint_trajectory_controller_left_arm:
+    type: effort_controllers/JointPositionController
+    joint: leftarmlockjoint
+    pid: {p: 1000000.0, i: 0.00, d: 1.0}
+  #control the lock 
+  joint_trajectory_controller_right_arm:
+    type: effort_controllers/JointPositionController
+    joint: rightarmlockjoint
+    pid: {p: 100000.0, i: 0.00, d: 1.0}
+ 
+ 
+
